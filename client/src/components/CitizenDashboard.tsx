@@ -96,7 +96,7 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
           </div>
         </div>
 
-        {/* Demo Quick Selector Capsule */}
+        {/* Demo Selector Capsule */}
         <div style={{
           marginTop: '8px',
           marginRight: 'auto',
@@ -184,10 +184,10 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#dc2626', fontSize: '11px', fontWeight: '700' }}>
                   <MapPin size={11} strokeWidth={2.5} />
-                  <span>Ernakulam, Kochi</span>
+                  <span>Ratnapura, Sabaragamuwa</span>
                 </div>
                 <h2 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>
-                  Hello, Arjun 👋
+                  Hello, Lakshani 👋
                 </h2>
               </div>
             </div>
@@ -242,12 +242,12 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
                 justifyContent: 'center',
                 boxShadow: '0 2px 8px rgba(37,99,235,0.3)'
               }}>
-                A
+                L
               </div>
             </div>
           </div>
 
-          {/* Warning Banner */}
+          {/* Sri Lankan Flood Warning Banner */}
           <div style={{
             backgroundColor: '#fffbeb',
             border: '1.5px solid #fef3c7',
@@ -262,10 +262,10 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
               <AlertTriangle size={22} color="#d97706" strokeWidth={2.4} />
               <div>
                 <div style={{ fontSize: '11px', fontWeight: '800', color: '#b45309', letterSpacing: '0.4px' }}>
-                  FLOOD WARNING
+                  KALU GANGA FLOOD ALERT
                 </div>
                 <div style={{ fontSize: '11.5px', fontWeight: '600', color: '#1e293b', marginTop: '1px' }}>
-                  Heavy rainfall alert for your district
+                  Rising water levels reported in Ratnapura basin
                 </div>
               </div>
             </div>
@@ -340,7 +340,7 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
             </div>
           </div>
 
-          {/* Quick Action 3 Icon Buttons (Hotline Removed) */}
+          {/* Quick Action 3 Buttons */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '6px' }}>
             
             <div 
@@ -399,7 +399,7 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
 
           </div>
 
-          {/* Nearby Shelters Section Preview */}
+          {/* Nearby Sri Lankan Shelters Preview */}
           <div style={{ marginTop: '2px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <h3 style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>Nearby Shelters</h3>
@@ -442,7 +442,7 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
 
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h4 style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>Ernakulam Relief Camp</h4>
+                    <h4 style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>Ratnapura Central Relief Camp</h4>
                     <span style={{
                       backgroundColor: '#dcfce7',
                       color: '#15803d',
@@ -493,7 +493,7 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
 
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h4 style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>Govt. HS Emergency Shelter</h4>
+                    <h4 style={{ fontSize: '12px', fontWeight: '700', color: '#0f172a' }}>Ferguson High School Shelter</h4>
                     <span style={{
                       backgroundColor: '#ffedd5',
                       color: '#c2410c',
@@ -549,7 +549,7 @@ export const CitizenDashboard: React.FC<CitizenDashboardProps> = ({
                   Request #EX1024 — <span style={{ color: '#16a34a' }}>Resolved</span>
                 </h4>
                 <p style={{ fontSize: '10px', color: '#64748b', marginTop: '2px', fontWeight: '500' }}>
-                  Medical Assistance · 3 days ago
+                  Flood Evacuation Assistance · 2 days ago
                 </p>
               </div>
             </div>
