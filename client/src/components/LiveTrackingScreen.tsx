@@ -1,13 +1,17 @@
 import React from 'react';
 import { 
   ArrowLeft, 
+  MapPin, 
   Phone, 
+  ShieldCheck, 
+  Navigation, 
+  Radio, 
+  Clock, 
   Signal, 
   Wifi, 
-  BatteryMedium, 
-  User, 
-  Truck, 
-  ShieldAlert 
+  BatteryMedium,
+  User,
+  Truck
 } from 'lucide-react';
 
 interface LiveTrackingScreenProps {
@@ -16,10 +20,10 @@ interface LiveTrackingScreenProps {
   requestId?: string;
 }
 
-export const LiveTrackingScreen: React.FC<LiveTrackingScreenProps> = ({
-  onBack,
+export const LiveTrackingScreen: React.FC<LiveTrackingScreenProps> = ({ 
+  onBack, 
   onSwitchRole,
-  requestId = '#EX-2847'
+  requestId = '#EX-2847' 
 }) => {
   return (
     <div style={{
@@ -31,7 +35,6 @@ export const LiveTrackingScreen: React.FC<LiveTrackingScreenProps> = ({
       justifyContent: 'center',
       padding: '20px'
     }}>
-      {/* Phone Mockup Frame */}
       <div style={{
         position: 'relative',
         width: '390px',
@@ -91,7 +94,7 @@ export const LiveTrackingScreen: React.FC<LiveTrackingScreenProps> = ({
           </div>
         </div>
 
-        {/* Demo Quick Selector Capsule */}
+        {/* Top Demo Selector Capsule */}
         <div style={{
           marginTop: '6px',
           marginRight: 'auto',
@@ -151,154 +154,111 @@ export const LiveTrackingScreen: React.FC<LiveTrackingScreenProps> = ({
           </button>
         </div>
 
-        {/* Scrollable Body */}
+        {/* Map & Live Tracking Area */}
         <div style={{
           flex: 1,
-          padding: '8px 18px 14px 18px',
+          padding: '10px 18px 12px 18px',
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
           gap: '12px'
         }}>
 
-          {/* Header Title with Back Button & ID */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '2px' }}>
+          {/* Header Bar */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <button
+                type="button"
                 onClick={onBack}
                 style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '50%',
+                  width: '36px',
+                  height: '36px',
                   backgroundColor: '#ffffff',
-                  border: '1px solid #e2e8f0',
+                  borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  border: '1px solid #e2e8f0',
                   cursor: 'pointer',
-                  color: '#475569'
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
                 }}
               >
-                <ArrowLeft size={16} strokeWidth={2.5} />
+                <ArrowLeft size={18} color="#0f172a" />
               </button>
               <div>
-                <h2 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>
-                  Live Rescue Tracking
-                </h2>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '1px' }}>
-                  <div style={{ width: '6px', height: '6px', backgroundColor: '#2563eb', borderRadius: '50%' }} />
-                  <span style={{ fontSize: '10px', fontWeight: '800', color: '#2563eb', letterSpacing: '0.4px' }}>
-                    LIVE
-                  </span>
-                </div>
+                <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a' }}>Live Rescue Tracking</h3>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>Request {requestId}</span>
               </div>
             </div>
 
-            <span style={{ fontSize: '12px', fontWeight: '800', color: '#2563eb' }}>
-              {requestId}
-            </span>
-          </div>
-
-          {/* Map Vector Mockup */}
-          <div style={{
-            width: '100%',
-            height: '210px',
-            backgroundColor: '#e2f0d9',
-            borderRadius: '20px',
-            position: 'relative',
-            overflow: 'hidden',
-            border: '1.5px solid #cbd5e1',
-            boxShadow: '0 4px 14px rgba(0,0,0,0.04)'
-          }}>
-            {/* Map Road Grid Lines */}
-            <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
-              {/* Vertical Roads */}
-              <line x1="40" y1="0" x2="40" y2="210" stroke="#ffffff" strokeWidth="8" />
-              <line x1="100" y1="0" x2="100" y2="210" stroke="#ffffff" strokeWidth="10" />
-              <line x1="180" y1="0" x2="180" y2="210" stroke="#ffffff" strokeWidth="12" />
-              <line x1="260" y1="0" x2="260" y2="210" stroke="#ffffff" strokeWidth="10" />
-              <line x1="320" y1="0" x2="320" y2="210" stroke="#ffffff" strokeWidth="8" />
-
-              {/* Horizontal Roads */}
-              <line x1="0" y1="35" x2="360" y2="35" stroke="#ffffff" strokeWidth="8" />
-              <line x1="0" y1="80" x2="360" y2="80" stroke="#ffffff" strokeWidth="10" />
-              <line x1="0" y1="130" x2="360" y2="130" stroke="#ffffff" strokeWidth="12" />
-              <line x1="0" y1="180" x2="360" y2="180" stroke="#ffffff" strokeWidth="8" />
-
-              {/* Dotted Route Line between Responder and Citizen */}
-              <line 
-                x1="260" 
-                y1="75" 
-                x2="190" 
-                y2="130" 
-                stroke="#2563eb" 
-                strokeWidth="3.5" 
-                strokeDasharray="6,6" 
-              />
-            </svg>
-
-            {/* MAP Tag Top Right */}
             <div style={{
-              position: 'absolute',
-              top: '10px',
-              right: '10px',
-              backgroundColor: 'rgba(255,255,255,0.85)',
-              padding: '2px 8px',
-              borderRadius: '6px',
-              fontSize: '9px',
-              fontWeight: '800',
-              color: '#64748b'
-            }}>
-              MAP
-            </div>
-
-            {/* Shelter Marker (Green 'S') */}
-            <div style={{
-              position: 'absolute',
-              left: '90px',
-              top: '70px',
-              width: '22px',
-              height: '22px',
-              backgroundColor: '#16a34a',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
+              backgroundColor: '#fee2e2',
+              color: '#dc2626',
               fontSize: '10px',
               fontWeight: '800',
-              boxShadow: '0 2px 6px rgba(22,163,74,0.4)',
-              border: '2px solid #ffffff'
+              padding: '4px 10px',
+              borderRadius: '9999px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
             }}>
-              S
+              <Radio size={12} className="animate-pulse" />
+              <span>LIVE GPS</span>
             </div>
+          </div>
 
-            {/* Responder Live Marker (Blue 'R') */}
+          {/* Graphical Map Representation */}
+          <div style={{
+            width: '100%',
+            height: '240px',
+            backgroundColor: '#e2f0d9',
+            borderRadius: '24px',
+            position: 'relative',
+            overflow: 'hidden',
+            border: '2px solid #cbd5e1',
+            boxShadow: '0 4px 14px rgba(0,0,0,0.05)'
+          }}>
+            {/* Road Vectors */}
+            <svg width="100%" height="100%" style={{ position: 'absolute', top: 0, left: 0 }}>
+              <line x1="60" y1="0" x2="60" y2="240" stroke="#ffffff" strokeWidth="12" />
+              <line x1="180" y1="0" x2="180" y2="240" stroke="#ffffff" strokeWidth="16" />
+              <line x1="300" y1="0" x2="300" y2="240" stroke="#ffffff" strokeWidth="10" />
+
+              <line x1="0" y1="50" x2="360" y2="50" stroke="#ffffff" strokeWidth="10" />
+              <line x1="0" y1="120" x2="360" y2="120" stroke="#ffffff" strokeWidth="16" />
+              <line x1="0" y1="190" x2="360" y2="190" stroke="#ffffff" strokeWidth="12" />
+
+              {/* Sri Lankan River Vector (Kalu Ganga simulation) */}
+              <path d="M 0 210 Q 120 180 240 220 T 360 210" fill="none" stroke="#bae6fd" strokeWidth="20" opacity="0.8" />
+
+              {/* Planned Rescue Route */}
+              <path d="M 80 60 L 180 120 L 260 170" fill="none" stroke="#2563eb" strokeWidth="5" strokeDasharray="6 6" />
+            </svg>
+
+            {/* Responder Vehicle Pin (Moving) */}
             <div style={{
               position: 'absolute',
-              left: '250px',
-              top: '64px',
-              width: '22px',
-              height: '22px',
+              left: '70px',
+              top: '48px',
+              width: '34px',
+              height: '34px',
               backgroundColor: '#2563eb',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: '#ffffff',
-              fontSize: '10px',
-              fontWeight: '800',
-              boxShadow: '0 2px 8px rgba(37,99,235,0.45)',
+              boxShadow: '0 4px 12px rgba(37,99,235,0.4)',
               border: '2px solid #ffffff'
             }}>
-              R
+              <Truck size={16} strokeWidth={2.5} />
             </div>
 
-            {/* Citizen Incident Marker (Red with Ripple Circle) */}
+            {/* Citizen SOS Location Pin */}
             <div style={{
               position: 'absolute',
-              left: '178px',
-              top: '118px',
+              left: '246px',
+              top: '154px',
               width: '38px',
               height: '38px',
               backgroundColor: 'rgba(220, 38, 38, 0.25)',
@@ -316,209 +276,97 @@ export const LiveTrackingScreen: React.FC<LiveTrackingScreenProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#ffffff',
-                fontSize: '12px',
-                fontWeight: '900',
-                border: '2px solid #ffffff',
-                boxShadow: '0 2px 8px rgba(220,38,38,0.5)'
+                border: '2px solid #ffffff'
               }}>
-                !
+                <MapPin size={14} />
               </div>
             </div>
           </div>
 
-          {/* Stats Bar (ETA, Distance, Status) */}
+          {/* ETA Metrics Card */}
           <div style={{
             backgroundColor: '#ffffff',
-            borderRadius: '18px',
-            padding: '12px 16px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
+            borderRadius: '20px',
+            padding: '14px 16px',
+            border: '1px solid #e2e8f0',
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
+            boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
           }}>
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ fontSize: '10px', fontWeight: '700', color: '#64748b' }}>ETA</span>
-              <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#2563eb', marginTop: '2px' }}>8 min</h3>
+            <div>
+              <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700' }}>ESTIMATED ARRIVAL</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                <Clock size={16} color="#2563eb" />
+                <h3 style={{ fontSize: '18px', fontWeight: '900', color: '#0f172a' }}>6 mins</h3>
+              </div>
             </div>
 
-            <div style={{ textAlign: 'center', borderLeft: '1px solid #f1f5f9', borderRight: '1px solid #f1f5f9' }}>
-              <span style={{ fontSize: '10px', fontWeight: '700', color: '#64748b' }}>DISTANCE</span>
-              <h3 style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', marginTop: '2px' }}>2.4 km</h3>
-            </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ fontSize: '10px', fontWeight: '700', color: '#64748b' }}>STATUS</span>
-              <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#ea580c', marginTop: '2px' }}>En Route</h3>
+            <div style={{ textAlign: 'right' }}>
+              <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '700' }}>DISTANCE</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px', justifyContent: 'flex-end' }}>
+                <Navigation size={14} color="#16a34a" />
+                <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a' }}>1.2 km</h4>
+              </div>
             </div>
           </div>
 
-          {/* Rescue Team Card */}
+          {/* Responder Profile Card */}
           <div style={{
             backgroundColor: '#ffffff',
-            borderRadius: '18px',
-            padding: '12px 16px',
+            borderRadius: '20px',
+            padding: '14px 16px',
             border: '1px solid #e2e8f0',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
           }}>
-            <p style={{
-              fontSize: '10px',
-              fontWeight: '800',
-              color: '#64748b',
-              letterSpacing: '0.6px',
-              marginBottom: '10px',
-              textTransform: 'uppercase'
-            }}>
-              RESCUE TEAM
-            </p>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{
-                  width: '42px',
-                  height: '42px',
-                  backgroundColor: '#2563eb',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff',
-                  fontWeight: '800',
-                  fontSize: '14px'
-                }}>
-                  T3
-                </div>
-
-                <div>
-                  <h4 style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>
-                    Team Alpha-3
-                  </h4>
-                  <p style={{ fontSize: '10.5px', color: '#64748b', fontWeight: '500', marginTop: '1px' }}>
-                    NDRF Unit · Kochi District
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                    <div style={{ width: '5px', height: '5px', backgroundColor: '#16a34a', borderRadius: '50%' }} />
-                    <span style={{ fontSize: '10px', fontWeight: '700', color: '#16a34a' }}>
-                      Responding now
-                    </span>
-                  </div>
-                </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{
+                width: '44px',
+                height: '44px',
+                backgroundColor: '#eff6ff',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '20px',
+                border: '1.5px solid #dbeafe'
+              }}>
+                👨‍🚒
               </div>
 
-              {/* Call Button */}
-              <a
-                href="tel:112"
-                style={{
-                  width: '38px',
-                  height: '38px',
-                  backgroundColor: '#f0fdf4',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#16a34a',
-                  textDecoration: 'none',
-                  border: '1px solid #dcfce7',
-                  boxShadow: '0 2px 6px rgba(22,163,74,0.15)'
-                }}
-              >
-                <Phone size={17} strokeWidth={2.4} />
-              </a>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <h4 style={{ fontSize: '13.5px', fontWeight: '800', color: '#0f172a' }}>Kasun Perera</h4>
+                  <ShieldCheck size={14} color="#2563eb" />
+                </div>
+                <p style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', marginTop: '1px' }}>
+                  Sabaragamuwa Rescue Unit #4
+                </p>
+              </div>
             </div>
+
+            <a
+              href="tel:112"
+              style={{
+                width: '40px',
+                height: '40px',
+                backgroundColor: '#16a34a',
+                color: '#ffffff',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textDecoration: 'none',
+                boxShadow: '0 4px 10px rgba(22,163,74,0.3)'
+              }}
+            >
+              <Phone size={18} strokeWidth={2.4} />
+            </a>
           </div>
 
-          {/* Live Updates Feed */}
-          <div style={{
-            backgroundColor: '#ffffff',
-            borderRadius: '18px',
-            padding: '12px 16px',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
-          }}>
-            <p style={{
-              fontSize: '10px',
-              fontWeight: '800',
-              color: '#64748b',
-              letterSpacing: '0.6px',
-              marginBottom: '10px',
-              textTransform: 'uppercase'
-            }}>
-              LIVE UPDATES
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                <div style={{ width: '7px', height: '7px', backgroundColor: '#2563eb', borderRadius: '50%', marginTop: '5px' }} />
-                <div>
-                  <h5 style={{ fontSize: '11.5px', fontWeight: '700', color: '#0f172a' }}>
-                    Team Alpha-3 is on the way — ETA 8 minutes
-                  </h5>
-                  <span style={{ fontSize: '9.5px', color: '#64748b', fontWeight: '500' }}>09:46 AM</span>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                <div style={{ width: '7px', height: '7px', backgroundColor: '#2563eb', borderRadius: '50%', marginTop: '5px' }} />
-                <div>
-                  <h5 style={{ fontSize: '11.5px', fontWeight: '700', color: '#0f172a' }}>
-                    Rescue team has been assigned to you
-                  </h5>
-                  <span style={{ fontSize: '9.5px', color: '#64748b', fontWeight: '500' }}>09:44 AM</span>
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                <div style={{ width: '7px', height: '7px', backgroundColor: '#16a34a', borderRadius: '50%', marginTop: '5px' }} />
-                <div>
-                  <h5 style={{ fontSize: '11.5px', fontWeight: '700', color: '#0f172a' }}>
-                    Your emergency request was received
-                  </h5>
-                  <span style={{ fontSize: '9.5px', color: '#64748b', fontWeight: '500' }}>09:41 AM</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-        {/* Bottom Logo Footer & Home Bar */}
-        <div style={{
-          width: '100%',
-          paddingBottom: '12px',
-          paddingTop: '6px',
-          background: 'linear-gradient(to top, #e2e8f0, transparent)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '6px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', opacity: 0.85 }}>
-            <div style={{
-              width: '18px',
-              height: '18px',
-              backgroundColor: '#dc2626',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <ShieldAlert size={11} color="#ffffff" strokeWidth={2.6} />
-            </div>
-            <span style={{ fontSize: '12px', fontWeight: '800', color: '#0f172a' }}>
-              Emergency<span style={{ color: '#dc2626' }}>X</span>
-            </span>
-          </div>
-
-          <div style={{
-            width: '120px',
-            height: '4px',
-            backgroundColor: '#94a3b8',
-            borderRadius: '9999px',
-            marginTop: '2px'
-          }} />
         </div>
 
       </div>
