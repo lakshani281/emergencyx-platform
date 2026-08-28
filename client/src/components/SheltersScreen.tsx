@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -9,8 +9,25 @@ import {
   Wifi, 
   BatteryMedium,
   User,
-  Truck
+  Truck,
+  Loader2,
+  Frown
 } from 'lucide-react';
+
+interface ShelterItem {
+  id?: string | number;
+  _id?: string;
+  name: string;
+  location: string;
+  capacity: number;
+  occupied: number;
+  status: string;
+  contact?: string;
+  phone?: string;
+  distance?: number | string;
+  lat?: number;
+  lng?: number;
+}
 
 interface SheltersScreenProps {
   onBack: () => void;
@@ -18,68 +35,125 @@ interface SheltersScreenProps {
   onSwitchRole?: (role: 'citizen' | 'responder') => void;
 }
 
+const fallbackShelters: ShelterItem[] = [
+  {
+    _id: '1',
+    name: 'Ranna Community Relief Center',
+    location: 'Main Road, Ranna, Hambantota',
+    capacity: 150,
+    occupied: 35,
+    status: 'Open',
+    contact: '+94 47 224 5100',
+    distance: 1.2,
+    lat: 6.0792,
+    lng: 80.8486
+  },
+  {
+    _id: '2',
+    name: 'Tangalle Urban Council Hall',
+    location: 'Beach Road, Tangalle',
+    capacity: 200,
+    occupied: 80,
+    status: 'Open',
+    contact: '+94 47 224 0275',
+    distance: 8.5,
+    lat: 6.0244,
+    lng: 80.7941
+  },
+  {
+    _id: '3',
+    name: 'Ratnapura Central Relief Camp',
+    location: 'Town Hall Grounds, Ratnapura',
+    capacity: 250,
+    occupied: 120,
+    status: 'Open',
+    contact: '+94 45 222 2222',
+    distance: 0.8,
+    lat: 6.6828,
+    lng: 80.4033
+  },
+  {
+    _id: '4',
+    name: 'Colombo Disaster Management Center (DMC)',
+    location: 'Vidya Mawatha, Colombo 07',
+    capacity: 400,
+    occupied: 90,
+    status: 'Open',
+    contact: '+94 11 213 6136',
+    distance: 3.2,
+    lat: 6.9044,
+    lng: 79.8718
+  },
+  {
+    _id: '5',
+    name: 'Matara Rahula College Relief Center',
+    location: 'Rahula Road, Matara',
+    capacity: 250,
+    occupied: 75,
+    status: 'Open',
+    contact: '+94 41 222 2238',
+    distance: 14.2,
+    lat: 5.9496,
+    lng: 80.5469
+  }
+];
+
 export const SheltersScreen: React.FC<SheltersScreenProps> = ({ 
   onBack, 
   onNavigateTab,
   onSwitchRole 
 }) => {
+  const [shelters, setShelters] = useState<ShelterItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const sheltersList = [
-    {
-      id: 1,
-      name: 'Ratnapura Central Relief Camp',
-      location: 'Town Hall Grounds, Ratnapura',
-      distance: '0.8 km',
-      capacity: '60% Full',
-      status: 'Open',
-      statusBg: '#dcfce7',
-      statusColor: '#15803d',
-      occupancyRatio: 60,
-      phone: '0452222222'
-    },
-    {
-      id: 2,
-      name: 'Ferguson Girls’ High School Shelter',
-      location: 'Wahalwatte Road, Ratnapura',
-      distance: '1.4 km',
-      capacity: 'Full (95%)',
-      status: 'Full',
-      statusBg: '#ffedd5',
-      statusColor: '#c2410c',
-      occupancyRatio: 95,
-      phone: '0452222333'
-    },
-    {
-      id: 3,
-      name: 'Sri Sudharmarama Temple Hall',
-      location: 'Hidellana, Ratnapura',
-      distance: '2.1 km',
-      capacity: '30% Full',
-      status: 'Open',
-      statusBg: '#dcfce7',
-      statusColor: '#15803d',
-      occupancyRatio: 30,
-      phone: '0452222444'
-    },
-    {
-      id: 4,
-      name: 'Saman Devalaya Community Center',
-      location: 'Sabaragamuwa District',
-      distance: '3.5 km',
-      capacity: 'Available',
-      status: 'Open',
-      statusBg: '#dcfce7',
-      statusColor: '#15803d',
-      occupancyRatio: 15,
-      phone: '0452222555'
+  const fetchShelters = async (lat?: number, lng?: number) => {
+    try {
+      setLoading(true);
+      const url = (lat && lng) 
+        ? `http://localhost:5000/api/shelters?lat=${lat}&lng=${lng}`
+        : `http://localhost:5000/api/shelters`;
+      
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('API Error');
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0) {
+        setShelters(data);
+      } else {
+        setShelters(fallbackShelters);
+      }
+    } catch (error) {
+      console.warn('Backend offline or error, loading default shelters:', error);
+      setShelters(fallbackShelters);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
-  const filteredShelters = sheltersList.filter(s => 
-    s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          fetchShelters(pos.coords.latitude, pos.coords.longitude);
+        },
+        () => {
+          fetchShelters();
+        },
+        { timeout: 3000 }
+      );
+    } else {
+      fetchShelters();
+    }
+  }, []);
+
+  const filteredShelters = shelters.filter(s => {
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return true;
+    return (
+      (s.name && s.name.toLowerCase().includes(q)) ||
+      (s.location && s.location.toLowerCase().includes(q))
+    );
+  });
 
   return (
     <div style={{
@@ -259,7 +333,7 @@ export const SheltersScreen: React.FC<SheltersScreenProps> = ({
             <Search size={16} color="#94a3b8" />
             <input
               type="text"
-              placeholder="Search by shelter name or city..."
+              placeholder="Search by city, town or shelter name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -273,116 +347,148 @@ export const SheltersScreen: React.FC<SheltersScreenProps> = ({
             />
           </div>
 
-          {/* Shelters List Cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {filteredShelters.map((shelter) => (
-              <div
-                key={shelter.id}
-                style={{
-                  backgroundColor: '#ffffff',
-                  borderRadius: '20px',
-                  padding: '14px',
-                  border: '1px solid #e2e8f0',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{
-                      width: '38px',
-                      height: '38px',
-                      backgroundColor: '#f0fdf4',
-                      borderRadius: '12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '18px'
-                    }}>
-                      🏕️
-                    </div>
-                    <div>
-                      <h4 style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>{shelter.name}</h4>
-                      <p style={{ fontSize: '11px', color: '#64748b', fontWeight: '500', marginTop: '1px' }}>{shelter.location}</p>
-                    </div>
-                  </div>
+          {/* Results Render */}
+          {loading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', color: '#64748b' }}>
+              <Loader2 size={26} className="animate-spin" style={{ marginBottom: '8px' }} />
+              <span style={{ fontSize: '12px', fontWeight: '600' }}>Locating shelters...</span>
+            </div>
+          ) : filteredShelters.length === 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px', textAlign: 'center', color: '#94a3b8' }}>
+              <Frown size={32} style={{ marginBottom: '8px', color: '#cbd5e1' }} />
+              <p style={{ fontSize: '13px', fontWeight: '700', color: '#475569' }}>No shelters found</p>
+              <p style={{ fontSize: '11px', marginTop: '4px' }}>Try searching: Ranna, Tangalle, Ratnapura, or Colombo.</p>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {filteredShelters.map((shelter, idx) => {
+                const occupancy = shelter.occupied || 0;
+                const totalCap = shelter.capacity || 100;
+                const ratio = Math.round((occupancy / totalCap) * 100);
+                const isFull = shelter.status === 'Full' || ratio >= 95;
+                const statusBg = isFull ? '#ffedd5' : '#dcfce7';
+                const statusColor = isFull ? '#c2410c' : '#15803d';
+                const phoneNum = shelter.contact || shelter.phone || '+94 11 213 6136';
 
-                  <span style={{
-                    backgroundColor: shelter.statusBg,
-                    color: shelter.statusColor,
-                    fontSize: '9.5px',
-                    fontWeight: '800',
-                    padding: '2px 8px',
-                    borderRadius: '9999px'
-                  }}>
-                    {shelter.status}
-                  </span>
-                </div>
-
-                {/* Capacity Progress Bar */}
-                <div style={{ marginTop: '2px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px', fontWeight: '600', color: '#64748b', marginBottom: '4px' }}>
-                    <span>Capacity: {shelter.capacity}</span>
-                    <span>{shelter.distance}</span>
-                  </div>
-                  <div style={{ width: '100%', height: '5px', backgroundColor: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
-                    <div style={{
-                      width: `${shelter.occupancyRatio}%`,
-                      height: '100%',
-                      backgroundColor: shelter.occupancyRatio > 80 ? '#ea580c' : '#16a34a'
-                    }} />
-                  </div>
-                </div>
-
-                {/* Directions and Call Buttons */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
-                  <button
-                    type="button"
+                return (
+                  <div
+                    key={shelter._id || shelter.id || idx}
                     style={{
-                      backgroundColor: '#eff6ff',
-                      color: '#2563eb',
-                      border: '1px solid #dbeafe',
-                      borderRadius: '10px',
-                      padding: '7px 0',
-                      fontSize: '11px',
-                      fontWeight: '700',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '4px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <Navigation size={12} />
-                    <span>Get Directions</span>
-                  </button>
-
-                  <a
-                    href={`tel:${shelter.phone}`}
-                    style={{
-                      backgroundColor: '#f8fafc',
-                      color: '#475569',
+                      backgroundColor: '#ffffff',
+                      borderRadius: '20px',
+                      padding: '14px',
                       border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      padding: '7px 0',
-                      fontSize: '11px',
-                      fontWeight: '700',
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '4px',
-                      textDecoration: 'none'
+                      flexDirection: 'column',
+                      gap: '8px',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
                     }}
                   >
-                    <Phone size={12} />
-                    <span>Call Shelter</span>
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{
+                          width: '38px',
+                          height: '38px',
+                          backgroundColor: '#f0fdf4',
+                          borderRadius: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '18px'
+                        }}>
+                          🏕️
+                        </div>
+                        <div>
+                          <h4 style={{ fontSize: '13px', fontWeight: '800', color: '#0f172a' }}>{shelter.name}</h4>
+                          <p style={{ fontSize: '11px', color: '#64748b', fontWeight: '500', marginTop: '1px' }}>{shelter.location}</p>
+                        </div>
+                      </div>
+
+                      <span style={{
+                        backgroundColor: statusBg,
+                        color: statusColor,
+                        fontSize: '9.5px',
+                        fontWeight: '800',
+                        padding: '2px 8px',
+                        borderRadius: '9999px'
+                      }}>
+                        {shelter.status || 'Open'}
+                      </span>
+                    </div>
+
+                    {/* Capacity Progress Bar */}
+                    <div style={{ marginTop: '2px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px', fontWeight: '600', color: '#64748b', marginBottom: '4px' }}>
+                        <span>Capacity: {occupancy} / {totalCap} ({ratio}%)</span>
+                        <span style={{ color: '#2563eb', fontWeight: '700' }}>
+                          {shelter.distance !== undefined ? (typeof shelter.distance === 'number' ? `${shelter.distance} km away` : shelter.distance) : ''}
+                        </span>
+                      </div>
+                      <div style={{ width: '100%', height: '5px', backgroundColor: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{
+                          width: `${Math.min(ratio, 100)}%`,
+                          height: '100%',
+                          backgroundColor: ratio > 80 ? '#ea580c' : '#16a34a'
+                        }} />
+                      </div>
+                    </div>
+
+                    {/* Directions and Call Buttons */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '4px' }}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (shelter.lat && shelter.lng) {
+                            window.open(`https://www.google.com/maps/dir/?api=1&destination=${shelter.lat},${shelter.lng}`, '_blank');
+                          } else {
+                            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shelter.name + ' ' + shelter.location)}`, '_blank');
+                          }
+                        }}
+                        style={{
+                          backgroundColor: '#eff6ff',
+                          color: '#2563eb',
+                          border: '1px solid #dbeafe',
+                          borderRadius: '10px',
+                          padding: '7px 0',
+                          fontSize: '11px',
+                          fontWeight: '700',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '4px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <Navigation size={12} />
+                        <span>Get Directions</span>
+                      </button>
+
+                      <a
+                        href={`tel:${phoneNum}`}
+                        style={{
+                          backgroundColor: '#f8fafc',
+                          color: '#475569',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '10px',
+                          padding: '7px 0',
+                          fontSize: '11px',
+                          fontWeight: '700',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '4px',
+                          textDecoration: 'none'
+                        }}
+                      >
+                        <Phone size={12} />
+                        <span>Call Shelter</span>
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
         </div>
 
